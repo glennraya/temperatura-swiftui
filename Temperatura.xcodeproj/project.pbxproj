@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C319D4602465389400D8C576 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C319D45F2465389400D8C576 /* LocationManager.swift */; };
+		C319D46224657A3400D8C576 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C319D46124657A3400D8C576 /* Constants.swift */; };
 		C35ECD45246114C7001E3A65 /* ForecastModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35ECD44246114C7001E3A65 /* ForecastModel.swift */; };
 		C35ECD4824614081001E3A65 /* WeatherPartials.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35ECD4724614081001E3A65 /* WeatherPartials.swift */; };
 		C35ECD4C24615F21001E3A65 /* OtherDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35ECD4B24615F21001E3A65 /* OtherDetails.swift */; };
@@ -18,6 +20,8 @@
 		C37CEE8B245D65FA00473301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C37CEE89245D65FA00473301 /* LaunchScreen.storyboard */; };
 		C37CEE96245D65FB00473301 /* TemperaturaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37CEE95245D65FB00473301 /* TemperaturaTests.swift */; };
 		C37CEEA1245D65FB00473301 /* TemperaturaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37CEEA0245D65FB00473301 /* TemperaturaUITests.swift */; };
+		C39DBC012464F6DE002659C4 /* HomeTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39DBC002464F6DE002659C4 /* HomeTab.swift */; };
+		C39DBC032464F7EB002659C4 /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39DBC022464F7EB002659C4 /* Forecast.swift */; };
 		C3A08CD5245D8377002FC9FF /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A08CD4245D8377002FC9FF /* WeatherModel.swift */; };
 		C3A08CD7245D9850002FC9FF /* TemperaturaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A08CD6245D9850002FC9FF /* TemperaturaViewModel.swift */; };
 		C3A08CD9245DCA4F002FC9FF /* TemperaturaServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A08CD8245DCA4F002FC9FF /* TemperaturaServices.swift */; };
@@ -44,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C319D45F2465389400D8C576 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		C319D46124657A3400D8C576 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		C35ECD44246114C7001E3A65 /* ForecastModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastModel.swift; sourceTree = "<group>"; };
 		C35ECD4724614081001E3A65 /* WeatherPartials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherPartials.swift; sourceTree = "<group>"; };
 		C35ECD4B24615F21001E3A65 /* OtherDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherDetails.swift; sourceTree = "<group>"; };
@@ -61,6 +67,8 @@
 		C37CEE9C245D65FB00473301 /* TemperaturaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TemperaturaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C37CEEA0245D65FB00473301 /* TemperaturaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperaturaUITests.swift; sourceTree = "<group>"; };
 		C37CEEA2245D65FB00473301 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C39DBC002464F6DE002659C4 /* HomeTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTab.swift; sourceTree = "<group>"; };
+		C39DBC022464F7EB002659C4 /* Forecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forecast.swift; sourceTree = "<group>"; };
 		C3A08CD4245D8377002FC9FF /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		C3A08CD6245D9850002FC9FF /* TemperaturaViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperaturaViewModel.swift; sourceTree = "<group>"; };
 		C3A08CD8245DCA4F002FC9FF /* TemperaturaServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperaturaServices.swift; sourceTree = "<group>"; };
@@ -94,6 +102,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C319D45E2465388700D8C576 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				C319D45F2465389400D8C576 /* LocationManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		C35ECD4624614060001E3A65 /* Partials */ = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +122,8 @@
 		C35ECD4D2461B1BA001E3A65 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				C39DBC022464F7EB002659C4 /* Forecast.swift */,
+				C37CEE82245D65F000473301 /* Home.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -133,6 +151,7 @@
 		C37CEE7D245D65F000473301 /* Temperatura */ = {
 			isa = PBXGroup;
 			children = (
+				C319D45E2465388700D8C576 /* Managers */,
 				C35ECD4D2461B1BA001E3A65 /* Screens */,
 				C35ECD4624614060001E3A65 /* Partials */,
 				C3CFBD91245FAD3000194D42 /* Helpers */,
@@ -141,7 +160,7 @@
 				C3A08CD1245D8325002FC9FF /* View Models */,
 				C37CEE7E245D65F000473301 /* AppDelegate.swift */,
 				C37CEE80245D65F000473301 /* SceneDelegate.swift */,
-				C37CEE82245D65F000473301 /* Home.swift */,
+				C39DBC002464F6DE002659C4 /* HomeTab.swift */,
 				C37CEE84245D65FA00473301 /* Assets.xcassets */,
 				C37CEE89245D65FA00473301 /* LaunchScreen.storyboard */,
 				C37CEE8C245D65FA00473301 /* Info.plist */,
@@ -205,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				C3CFBD92245FAD4B00194D42 /* Image Loader */,
+				C319D46124657A3400D8C576 /* Constants.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -352,8 +372,12 @@
 			files = (
 				C3A08CD5245D8377002FC9FF /* WeatherModel.swift in Sources */,
 				C35ECD4824614081001E3A65 /* WeatherPartials.swift in Sources */,
+				C319D4602465389400D8C576 /* LocationManager.swift in Sources */,
+				C39DBC032464F7EB002659C4 /* Forecast.swift in Sources */,
 				C3A08CD9245DCA4F002FC9FF /* TemperaturaServices.swift in Sources */,
+				C39DBC012464F6DE002659C4 /* HomeTab.swift in Sources */,
 				C37CEE7F245D65F000473301 /* AppDelegate.swift in Sources */,
+				C319D46224657A3400D8C576 /* Constants.swift in Sources */,
 				C37CEE81245D65F000473301 /* SceneDelegate.swift in Sources */,
 				C35ECD4C24615F21001E3A65 /* OtherDetails.swift in Sources */,
 				C3CFBD96245FADFE00194D42 /* AsyncImage.swift in Sources */,

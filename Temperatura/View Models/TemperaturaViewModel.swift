@@ -13,15 +13,18 @@ import Combine
 class TemperaturaViewModel: ObservableObject {
     private var temperatureService: TemperaturaService!
     @Published var city_name: String = ""
-//    @Published var main = Main()
-//    @Published var wind = Wind()
-//    @Published var weather = [Weather]()
-//    @Published var sys = Sys()
     @Published var weatherResponse = WeatherResponse.init(name: "", dt: 0, main: Main(), wind: Wind(), weather: [], sys: Sys())
 
     /// Initialize the WeatherService
     init() {
         self.temperatureService = TemperaturaService()
+    }
+    
+    /// Get the date returned by the API
+    var date: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .full
+        return formatter.string(from: Date(timeIntervalSince1970: TimeInterval(self.weatherResponse.dt)))
     }
     
     /// Get the temperature
@@ -112,20 +115,30 @@ class TemperaturaViewModel: ObservableObject {
     
     /// City name
     var cityName: String = ""
+    var cityNameOnLoad: String = ""
     
     /// Search for city
     public func search() {
         /// You need to add the 'addingPercentEncoding' property so you can search for cities
         /// with space between words, otherwise it will only work on single word cities.
         if let city = self.cityName.addingPercentEncoding(withAllowedCharacters: .alphanumerics) {
-            fetchWeather(by: city)
+            fetchWeather(by: city, byCoordinates: false, lat: 0.0, long: 0.0)
+        }
+    }
+    
+    /// Search for weather in a city upon the app loads.
+    public func searchOnLoad(city: String, lat: Double, long: Double) {
+        if let city = city.addingPercentEncoding(withAllowedCharacters: .alphanumerics) {
+            
+            /// TODO: Insert the location coordinates here...
+            fetchWeather(by: city, byCoordinates: true, lat: lat, long: long)
         }
     }
     
     /// Fetch the weather by city
-    private func fetchWeather(by city: String) {
+    private func fetchWeather(by city: String, byCoordinates: Bool, lat: Double, long: Double) {
         /// Trigger the getWeather service from the WeatherService.swift
-        self.temperatureService.getWeather(city: city) { weather  in
+        self.temperatureService.getWeather(city: city, byCoordinates: byCoordinates, lat: lat, long: long) { weather  in
             
             if let weather = weather {
                 DispatchQueue.main.async {

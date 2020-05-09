@@ -95,7 +95,7 @@ struct WeatherPartials: View {
                 }
             }
         }
-        .frame(width: screen.width * 0.35)
+        .frame(maxWidth: .infinity)
         .padding()
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 12.0))

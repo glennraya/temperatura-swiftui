@@ -15,28 +15,34 @@ struct OtherDetails: View {
     var body: some View {
         ZStack {
             Color.init(#colorLiteral(red: 0.9672107618, green: 0.9672107618, blue: 0.9672107618, alpha: 1))
-                .edgesIgnoringSafeArea(.all)
-            ScrollView(showsIndicators: false) {
-                VStack {
-                    HStack(spacing: 15) {
-                        WeatherPartials(dataType: "humidity", humidity: weatherData.humidity)
-                        WeatherPartials(dataType: "windSpeed", windSpeed: weatherData.wind_speed)
+            VStack {
+                ScrollView(showsIndicators: false) {
+                    VStack {
+                        HStack(spacing: 15) {
+                            WeatherPartials(dataType: "humidity", humidity: weatherData.humidity)
+                            WeatherPartials(dataType: "windSpeed", windSpeed: weatherData.wind_speed)
+                        }
+                        .padding(.top, 30)
+                        
+                        HStack(spacing: 15) {
+                            WeatherPartials(dataType: "min_temp", temp_min: weatherData.temp_min)
+                            WeatherPartials(dataType: "max_temp", temp_max: weatherData.temp_max)
+                        }
                     }
-                    .frame(width: screen.width)
-                    .padding(.top, 30)
-                    
-                    HStack(spacing: 15) {
-                        WeatherPartials(dataType: "min_temp", temp_min: weatherData.temp_min)
-                        WeatherPartials(dataType: "max_temp", temp_max: weatherData.temp_max)
-                    }
+                    .padding()
+//                    .background(Color.gray)
                 }
+                
             }
-        }
+        }.edgesIgnoringSafeArea(.all)
     }
 }
 
 struct OtherDetails_Previews: PreviewProvider {
     static var previews: some View {
-        OtherDetails()
+        Group {
+            OtherDetails()
+            OtherDetails().previewLayout(.fixed(width: 700, height: 323))
+        }
     }
 }
