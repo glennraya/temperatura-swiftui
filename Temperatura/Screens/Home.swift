@@ -4,19 +4,32 @@ import SwURL
 let screen = UIScreen.main.bounds
 
 struct Home: View {
-    @ObservedObject var temperaturaVM = TemperaturaViewModel()
+//    @ObservedObject var temperaturaVM = TemperaturaViewModel()
+    /// The TemperaturaViewModel has been moved to the environment object.
+    /// To make all the data available to child components of this view.
+    @EnvironmentObject var temperaturaVM: TemperaturaViewModel
+    
+    /// The location manager is the class that fetches the location of the user
+    /// This requires 'Privacy' location proerties in the info.plist file.
     @ObservedObject var lm = LocationManager()
+    
+    /// Show the search city text field or not.
     @State var searchCity: Bool = false
+    
     @State var size: CGFloat = 0.0
     
+    /// The ImageUrl class is responsible for fetching remote images.
     let imageLoader = ImageUrl()
+    
     @State var image: UIImage? = nil
     @State var showAlert: Bool = false
     
+    /// These are the data returned by the location manager class.
     var placemark: String { return("\(lm.placemark?.locality ?? "")") }
     var latitude: Double  { return lm.location?.latitude ?? 0 }
     var longitude: Double { return lm.location?.longitude ?? 0 }
     
+    /// Get the current date.
     var date = Date().description(with: Locale.init(identifier: "Asia/Manila"))
     
     /// Get the timezone.
@@ -33,10 +46,10 @@ struct Home: View {
 
     
     /// Initialize the temperaturaVM.
-    init() {
-        self.temperaturaVM = TemperaturaViewModel()
-    }
-    
+//    init() {
+//        self.temperaturaVM = TemperaturaViewModel()
+//    }
+//
     private func makeContent() -> some View {
         if let image = image {
             return AnyView(
@@ -105,7 +118,7 @@ struct Home: View {
                                 .animation(Animation.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0).delay(self.searchCity ? 0.0 : 0.4))
                                 
                                 Button(action: {
-//                                    self.temperaturaVM.searchOnLoad(city: self.placemark, lat: self.latitude, long: self.longitude)
+                                    self.temperaturaVM.searchOnLoad(city: self.placemark, lat: self.latitude, long: self.longitude)
                                     self.showAlert = true
                                 }) {
                                     Image(systemName: "location.fill")
@@ -114,7 +127,7 @@ struct Home: View {
                                         .shadow(color: Color.black.opacity(0.35), radius: 1, x: 0, y: 1)
                                 }.padding(.leading, 16)
                                     .alert(isPresented: self.$showAlert) {
-                                        Alert(title: Text("Important message"), message: Text("Wear sunscreen"), dismissButton: .default(Text("Got it!")))
+                                        Alert(title: Text("Current Location"), message: Text(self.temperaturaVM.city_country), dismissButton: .default(Text("Got it!")))
                                 }
                             
                             }
@@ -173,7 +186,7 @@ struct Home: View {
             })
             
             /// List view for other weather details
-            OtherDetails(weatherData: self.temperaturaVM)
+            OtherDetails()
                 
         }
     }
@@ -182,6 +195,6 @@ struct Home: View {
 /// Preview
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        Home()
+        Home().environmentObject(TemperaturaViewModel())
     }
 }

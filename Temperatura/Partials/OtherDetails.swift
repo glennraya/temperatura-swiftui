@@ -10,7 +10,8 @@ import SwiftUI
 
 /// Other weather details embedded in ScrollView view.
 struct OtherDetails: View {
-    @ObservedObject var weatherData = TemperaturaViewModel()
+//    @ObservedObject var weatherData = TemperaturaViewModel()
+    @EnvironmentObject var weatherData: TemperaturaViewModel
     
     var body: some View {
         ZStack {
@@ -41,8 +42,8 @@ struct OtherDetails: View {
 struct OtherDetails_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            OtherDetails()
-            OtherDetails().previewLayout(.fixed(width: 700, height: 323))
+            OtherDetails().environmentObject(TemperaturaViewModel())
+            OtherDetails().previewLayout(.fixed(width: 700, height: 323)).environmentObject(TemperaturaViewModel())
         }
     }
 }
