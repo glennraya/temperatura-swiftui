@@ -84,20 +84,17 @@ class TemperaturaViewModel: ObservableObject {
     /// Get the weather condition icon.
     var weatherIcon: String {
         if self.weatherResponse.weather.count >= 1 {
-            let icon: String = self.weatherResponse.weather[0].icon
-            let icon_url: String = "https://openweathermap.org/img/wn/\(icon)@2x.png"
-            
-            return icon_url
-        } else {
-            return ""
+            if let weatherIcon: String = self.weatherResponse.weather[0].icon {
+                return "https://openweathermap.org/img/wn/\(weatherIcon)@2x.png"
+            }
         }
-        
+        return "https://openweathermap.org/img/wn/02d@2x.png"
     }
     
     /// Get the weather description
     var description: String {
         if self.weatherResponse.weather.count >= 1 {
-            let description: String = self.weatherResponse.weather[0].description
+            let description: String = self.weatherResponse.weather[0].description!
             return description
         } else {
             return ""
@@ -143,6 +140,7 @@ class TemperaturaViewModel: ObservableObject {
             if let weather = weather {
                 DispatchQueue.main.async {
                     self.weatherResponse = weather
+                    print(self.weatherResponse)
                 }
             }
         }

@@ -1,4 +1,5 @@
 import SwiftUI
+import SwURL
 
 let screen = UIScreen.main.bounds
 
@@ -7,6 +8,10 @@ struct Home: View {
     @ObservedObject var lm = LocationManager()
     @State var searchCity: Bool = false
     @State var size: CGFloat = 0.0
+    
+    let imageLoader = ImageUrl()
+    @State var image: UIImage? = nil
+    @State var showAlert: Bool = false
     
     var placemark: String { return("\(lm.placemark?.locality ?? "")") }
     var latitude: Double  { return lm.location?.latitude ?? 0 }
@@ -32,6 +37,19 @@ struct Home: View {
         self.temperaturaVM = TemperaturaViewModel()
     }
     
+    private func makeContent() -> some View {
+        if let image = image {
+            return AnyView(
+                Image(uiImage: image)
+                    .resizable()
+                    .frame(width: 82, height: 82)
+                    .aspectRatio(contentMode: .fit)
+            )
+        } else {
+            return AnyView(Text("😢"))
+        }
+    }
+    
     var body: some View {
         
         VStack {
@@ -40,6 +58,7 @@ struct Home: View {
                 GeometryReader { geo in
                     HStack {
                         Spacer()
+                        self.makeContent()
                         Text("\(self.temperaturaVM.temperature != "" ? self.temperaturaVM.temperature : "30.0")")
                             .font(.system(size: 92)).bold()
                             .foregroundColor(.white)
@@ -64,7 +83,6 @@ struct Home: View {
                                     .foregroundColor(.white)
                                     .shadow(color: Color.black.opacity(0.5), radius: 3, x: 0, y: 3)
                                 HStack {
-                                    AsyncImage(url: URL(string: "http://openweathermap.org/img/wn/02dg\(self.temperaturaVM.weatherIcon)" + "@2x.pn"), placeholder: ActivityIndicator(isAnimating: true, style: <#T##UIActivityIndicatorView.Style#>))
                                     Text(self.temperaturaVM.description != "" ? self.temperaturaVM.description.capitalized : "Sunny")
                                         .font(.headline)
                                         .foregroundColor(.white)
@@ -87,13 +105,17 @@ struct Home: View {
                                 .animation(Animation.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0).delay(self.searchCity ? 0.0 : 0.4))
                                 
                                 Button(action: {
-                                    self.temperaturaVM.searchOnLoad(city: self.placemark, lat: self.latitude, long: self.longitude)
+//                                    self.temperaturaVM.searchOnLoad(city: self.placemark, lat: self.latitude, long: self.longitude)
+                                    self.showAlert = true
                                 }) {
                                     Image(systemName: "location.fill")
                                         .font(Font.system(size: 26))
                                         .foregroundColor(.white)
                                         .shadow(color: Color.black.opacity(0.35), radius: 1, x: 0, y: 1)
                                 }.padding(.leading, 16)
+                                    .alert(isPresented: self.$showAlert) {
+                                        Alert(title: Text("Important message"), message: Text("Wear sunscreen"), dismissButton: .default(Text("Got it!")))
+                                }
                             
                             }
                             .scaleEffect(self.size)
@@ -114,6 +136,7 @@ struct Home: View {
                                 self.temperaturaVM.search()
                                 self.searchCity = false
                                 self.temperaturaVM.cityName = ""
+                                self.imageLoader.load(url: URL(string: self.temperaturaVM.weatherIcon)!)
                             }
                             .padding(.vertical, 20)
                             .padding(.horizontal, 20)
@@ -140,8 +163,14 @@ struct Home: View {
             )
             .onAppear() {
                 self.temperaturaVM.searchOnLoad(city: self.placemark, lat: self.latitude, long: self.longitude)
-                
+                self.imageLoader.load(url: URL(string: self.temperaturaVM.weatherIcon)!)
             }
+            .onReceive(imageLoader.objectWillChange, perform: { image in
+                self.image = image
+            })
+            .onDisappear(perform: {
+                self.imageLoader.cancel()
+            })
             
             /// List view for other weather details
             OtherDetails(weatherData: self.temperaturaVM)

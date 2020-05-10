@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,6 +20,7 @@
 		C37CEE8B245D65FA00473301 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C37CEE89245D65FA00473301 /* LaunchScreen.storyboard */; };
 		C37CEE96245D65FB00473301 /* TemperaturaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37CEE95245D65FB00473301 /* TemperaturaTests.swift */; };
 		C37CEEA1245D65FB00473301 /* TemperaturaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37CEEA0245D65FB00473301 /* TemperaturaUITests.swift */; };
+		C388EF572466A83100713A08 /* ImageUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = C388EF562466A83100713A08 /* ImageUrl.swift */; };
 		C39DBC012464F6DE002659C4 /* HomeTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39DBC002464F6DE002659C4 /* HomeTab.swift */; };
 		C39DBC032464F7EB002659C4 /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39DBC022464F7EB002659C4 /* Forecast.swift */; };
 		C3A08CD5245D8377002FC9FF /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A08CD4245D8377002FC9FF /* WeatherModel.swift */; };
@@ -28,6 +29,7 @@
 		C3CFBD96245FADFE00194D42 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CFBD93245FADFE00194D42 /* AsyncImage.swift */; };
 		C3CFBD97245FADFE00194D42 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CFBD94245FADFE00194D42 /* ImageLoader.swift */; };
 		C3CFBD98245FADFE00194D42 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CFBD95245FADFE00194D42 /* ActivityIndicator.swift */; };
+		C3EFA57224667448006AEDF6 /* SwURL in Frameworks */ = {isa = PBXBuildFile; productRef = C3EFA57124667448006AEDF6 /* SwURL */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,7 @@
 		C37CEE9C245D65FB00473301 /* TemperaturaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TemperaturaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C37CEEA0245D65FB00473301 /* TemperaturaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemperaturaUITests.swift; sourceTree = "<group>"; };
 		C37CEEA2245D65FB00473301 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C388EF562466A83100713A08 /* ImageUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUrl.swift; sourceTree = "<group>"; };
 		C39DBC002464F6DE002659C4 /* HomeTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTab.swift; sourceTree = "<group>"; };
 		C39DBC022464F7EB002659C4 /* Forecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forecast.swift; sourceTree = "<group>"; };
 		C3A08CD4245D8377002FC9FF /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
@@ -82,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3EFA57224667448006AEDF6 /* SwURL in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,20 +227,13 @@
 		C3CFBD91245FAD3000194D42 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				C3CFBD92245FAD4B00194D42 /* Image Loader */,
-				C319D46124657A3400D8C576 /* Constants.swift */,
-			);
-			path = Helpers;
-			sourceTree = "<group>";
-		};
-		C3CFBD92245FAD4B00194D42 /* Image Loader */ = {
-			isa = PBXGroup;
-			children = (
 				C3CFBD95245FADFE00194D42 /* ActivityIndicator.swift */,
 				C3CFBD93245FADFE00194D42 /* AsyncImage.swift */,
 				C3CFBD94245FADFE00194D42 /* ImageLoader.swift */,
+				C319D46124657A3400D8C576 /* Constants.swift */,
+				C388EF562466A83100713A08 /* ImageUrl.swift */,
 			);
-			path = "Image Loader";
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,6 +252,9 @@
 			dependencies = (
 			);
 			name = Temperatura;
+			packageProductDependencies = (
+				C3EFA57124667448006AEDF6 /* SwURL */,
+			);
 			productName = Temperatura;
 			productReference = C37CEE7B245D65F000473301 /* Temperatura.app */;
 			productType = "com.apple.product-type.application";
@@ -327,6 +327,9 @@
 				Base,
 			);
 			mainGroup = C37CEE72245D65F000473301;
+			packageReferences = (
+				C3EFA57024667448006AEDF6 /* XCRemoteSwiftPackageReference "SwURL" */,
+			);
 			productRefGroup = C37CEE7C245D65F000473301 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -373,6 +376,7 @@
 				C3A08CD5245D8377002FC9FF /* WeatherModel.swift in Sources */,
 				C35ECD4824614081001E3A65 /* WeatherPartials.swift in Sources */,
 				C319D4602465389400D8C576 /* LocationManager.swift in Sources */,
+				C388EF572466A83100713A08 /* ImageUrl.swift in Sources */,
 				C39DBC032464F7EB002659C4 /* Forecast.swift in Sources */,
 				C3A08CD9245DCA4F002FC9FF /* TemperaturaServices.swift in Sources */,
 				C39DBC012464F6DE002659C4 /* HomeTab.swift in Sources */,
@@ -710,6 +714,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C3EFA57024667448006AEDF6 /* XCRemoteSwiftPackageReference "SwURL" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cmtrounce/SwURL";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C3EFA57124667448006AEDF6 /* SwURL */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C3EFA57024667448006AEDF6 /* XCRemoteSwiftPackageReference "SwURL" */;
+			productName = SwURL;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C37CEE73245D65F000473301 /* Project object */;
 }

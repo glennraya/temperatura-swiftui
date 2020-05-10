@@ -39,7 +39,6 @@ class LocationManager: NSObject, ObservableObject {
     private func geocode() {
         guard let location = self.location else { return }
         geocoder.reverseGeocodeLocation(location, completionHandler: { (places, error) in
-//            print("sdfsdf")
             if error == nil {
                 self.placemark = places?[0]
             } else {

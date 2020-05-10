@@ -29,7 +29,7 @@ struct AsyncImage<Placeholder: View>: View {
             if loader.image != nil {
                 Image(uiImage: loader.image!)
                     .resizable()
-                .scaledToFill()
+//                .scaledToFill()
             } else {
                 placeholder
             }

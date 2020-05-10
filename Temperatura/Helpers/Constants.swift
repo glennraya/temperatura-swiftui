@@ -12,5 +12,5 @@ struct Constants {
     static let APIKey = "72851dda65e1b81e5af962c62d81ebd5"
     static let coordsUrl = "https://api.openweathermap.org/data/2.5/weather?"
     static let cityUrl = "https://api.openweathermap.org/data/2.5/weather?"
-    static let weatherIconUrl = "http://openweathermap.org/img/wn/"
+    static let weatherIconUrl = "https://openweathermap.org/img/wn/"
 }

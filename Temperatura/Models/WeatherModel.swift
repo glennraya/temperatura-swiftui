@@ -36,10 +36,10 @@ struct Wind: Codable {
 
 /// The 'weather' object in the API response.
 struct Weather: Codable {
-    var id: Int
-    var main: String
-    var description: String
-    var icon: String
+    var id: Int?
+    var main: String?
+    var description: String?
+    var icon: String?
 }
 
 /// The 'sys' object in the API response.
