@@ -13,6 +13,7 @@ import Foundation
 struct WeatherResponse: Codable {
     var name: String
     var dt: Int
+    var timezone: Int
     var main: Main
     var wind: Wind
     var weather: [Weather]

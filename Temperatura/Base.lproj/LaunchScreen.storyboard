@@ -15,26 +15,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch" translatesAutoresizingMaskIntoConstraints="NO" id="Wui-gZ-Yv4">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Temperatura" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yw2-72-5hr">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="32"/>
-                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="45"/>
+                                <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Wui-gZ-Yv4" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="5bt-Rh-MU5"/>
                             <constraint firstItem="yw2-72-5hr" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="93F-YE-Utp"/>
-                            <constraint firstItem="Wui-gZ-Yv4" firstAttribute="bottom" secondItem="Ze5-6b-2t3" secondAttribute="bottom" id="ETo-cU-hoe"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="yw2-72-5hr" secondAttribute="bottom" id="Gbi-Vd-9Ae"/>
                             <constraint firstItem="yw2-72-5hr" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="MCk-PW-82E"/>
-                            <constraint firstItem="Wui-gZ-Yv4" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailing" id="cgM-hM-gd4"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="yw2-72-5hr" secondAttribute="trailing" id="nqg-lO-U54"/>
-                            <constraint firstItem="Wui-gZ-Yv4" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="zGG-RM-TPJ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -44,7 +37,4 @@
             <point key="canvasLocation" x="52.173913043478265" y="375"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="launch" width="1125" height="2436"/>
-    </resources>
 </document>

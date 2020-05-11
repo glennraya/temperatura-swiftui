@@ -14,6 +14,8 @@ struct WeatherPartials: View {
     var windSpeed: String? = ""
     var temp_min: String? = ""
     var temp_max: String? = ""
+    var sunrise: String? = ""
+    var sunset: String? = ""
     
     var body: some View {
         HStack(spacing: 20.0) {
@@ -38,7 +40,19 @@ struct WeatherPartials: View {
             if dataType == "max_temp" {
                 Image(systemName: "arrow.up")
                     .font(.system(.largeTitle))
-                    .foregroundColor(Color(#colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)))
+                    .foregroundColor(Color(#colorLiteral(red: 0.521568656, green: 0.1098039225, blue: 0.05098039284, alpha: 1)))
+            }
+            
+            if dataType == "sunrise" {
+                Image(systemName: "sunrise.fill")
+                    .font(.system(.largeTitle))
+                    .foregroundColor(Color(#colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)))
+            }
+            
+            if dataType == "sunset" {
+                Image(systemName: "sunset.fill")
+                    .font(.system(.largeTitle))
+                    .foregroundColor(Color(#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)))
             }
             
             VStack(spacing: 10) {
@@ -90,6 +104,32 @@ struct WeatherPartials: View {
                             .font(.callout).bold()
                         
                         Text("\(temp_max != "" ? "°C" : "")")
+                            .font(.footnote).foregroundColor(Color.secondary)
+                    }
+                }
+                
+                if dataType == "sunrise" {
+                    Text("Sunrise")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    HStack {
+                        Text("\((sunrise != "" ? sunrise : "-") ?? "")")
+                            .font(.callout).bold()
+                        
+                        Text("")
+                            .font(.footnote).foregroundColor(Color.secondary)
+                    }
+                }
+                
+                if dataType == "sunset" {
+                    Text("Sunset")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    HStack {
+                        Text("\((sunset != "" ? sunset : "-") ?? "")")
+                            .font(.callout).bold()
+                        
+                        Text("")
                             .font(.footnote).foregroundColor(Color.secondary)
                     }
                 }

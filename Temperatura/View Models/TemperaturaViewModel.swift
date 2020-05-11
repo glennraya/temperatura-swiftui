@@ -9,22 +9,52 @@
 /// ViewModel Class
 import Foundation
 import Combine
+import HealthKit
+import HealthKitUI
 
 class TemperaturaViewModel: ObservableObject {
     private var temperatureService: TemperaturaService!
     @Published var city_name: String = ""
-    @Published var weatherResponse = WeatherResponse.init(name: "", dt: 0, main: Main(), wind: Wind(), weather: [], sys: Sys())
+    @Published var weatherResponse = WeatherResponse.init(name: "", dt: 0, timezone: 0, main: Main(), wind: Wind(), weather: [], sys: Sys())
+    var weatherDate: Int = 0
 
     /// Initialize the WeatherService
     init() {
         self.temperatureService = TemperaturaService()
+        weatherDate = self.weatherResponse.dt
     }
+    
+    func dateFormatter(timeStamp: Int) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .full
+        //        return formatter.string(from: Date(timeIntervalSince1970: TimeInterval(self.weatherResponse.dt)))
+        return formatter.string(from: Date(timeIntervalSince1970: TimeInterval(timeStamp)))
+    }
+    
     
     /// Get the date returned by the API
     var date: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .full
-        return formatter.string(from: Date(timeIntervalSince1970: TimeInterval(self.weatherResponse.dt)))
+//        let formatter = DateFormatter()
+//        formatter.dateStyle = .full
+//        return formatter.string(from: Date(timeIntervalSince1970: TimeInterval(self.weatherResponse.dt)))
+//        return formatter.string(from: Date(timeIntervalSince1970: TimeInterval(self.weatherDate)))
+        return self.dateFormatter(timeStamp: self.weatherResponse.dt)
+    }
+    
+    /// Get the sunrise date
+    var sunrise: String {
+        if let sunrise = self.weatherResponse.sys.sunrise {
+            return self.dateFormatter(timeStamp: sunrise)
+        }
+        return ""
+    }
+    
+    /// Get the sunset date
+    var sunset: String {
+        if let sunset = self.weatherResponse.sys.sunset {
+            return self.dateFormatter(timeStamp: sunset)
+        }
+        return ""
     }
     
     /// Get the temperature
@@ -99,6 +129,19 @@ class TemperaturaViewModel: ObservableObject {
         } else {
             return ""
         }
+    }
+    
+    /// Determine the background image to be loaded based on whether it's night or day time.
+    var loadBackgroundImage: String {
+        if let sunset = self.weatherResponse.sys.sunset {
+            if self.weatherResponse.dt >= sunset {
+                return "night"
+            } else {
+                return "sunny"
+            }
+        }
+        return "sunny"
+        
     }
     
     /// Concatenate the city and country code (City of Balanga, PH).

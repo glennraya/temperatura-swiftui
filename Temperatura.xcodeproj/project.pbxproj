@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -29,7 +29,7 @@
 		C3CFBD96245FADFE00194D42 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CFBD93245FADFE00194D42 /* AsyncImage.swift */; };
 		C3CFBD97245FADFE00194D42 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CFBD94245FADFE00194D42 /* ImageLoader.swift */; };
 		C3CFBD98245FADFE00194D42 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CFBD95245FADFE00194D42 /* ActivityIndicator.swift */; };
-		C3EFA57224667448006AEDF6 /* SwURL in Frameworks */ = {isa = PBXBuildFile; productRef = C3EFA57124667448006AEDF6 /* SwURL */; };
+		C3D72B242467F075006397A4 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D72B232467F074006397A4 /* HealthKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +78,8 @@
 		C3CFBD93245FADFE00194D42 /* AsyncImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		C3CFBD94245FADFE00194D42 /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		C3CFBD95245FADFE00194D42 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		C3D72B212467F074006397A4 /* Temperatura.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Temperatura.entitlements; sourceTree = "<group>"; };
+		C3D72B232467F074006397A4 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3EFA57224667448006AEDF6 /* SwURL in Frameworks */,
+				C3D72B242467F075006397A4 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +141,7 @@
 				C37CEE94245D65FB00473301 /* TemperaturaTests */,
 				C37CEE9F245D65FB00473301 /* TemperaturaUITests */,
 				C37CEE7C245D65F000473301 /* Products */,
+				C3D72B222467F074006397A4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -155,6 +158,7 @@
 		C37CEE7D245D65F000473301 /* Temperatura */ = {
 			isa = PBXGroup;
 			children = (
+				C3D72B212467F074006397A4 /* Temperatura.entitlements */,
 				C319D45E2465388700D8C576 /* Managers */,
 				C35ECD4D2461B1BA001E3A65 /* Screens */,
 				C35ECD4624614060001E3A65 /* Partials */,
@@ -236,6 +240,14 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		C3D72B222467F074006397A4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C3D72B232467F074006397A4 /* HealthKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -253,7 +265,6 @@
 			);
 			name = Temperatura;
 			packageProductDependencies = (
-				C3EFA57124667448006AEDF6 /* SwURL */,
 			);
 			productName = Temperatura;
 			productReference = C37CEE7B245D65F000473301 /* Temperatura.app */;
@@ -328,7 +339,6 @@
 			);
 			mainGroup = C37CEE72245D65F000473301;
 			packageReferences = (
-				C3EFA57024667448006AEDF6 /* XCRemoteSwiftPackageReference "SwURL" */,
 			);
 			productRefGroup = C37CEE7C245D65F000473301 /* Products */;
 			projectDirPath = "";
@@ -554,6 +564,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Temperatura/Temperatura.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Temperatura/Preview Content\"";
 				DEVELOPMENT_TEAM = HWG7293UWD;
@@ -574,6 +585,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Temperatura/Temperatura.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Temperatura/Preview Content\"";
 				DEVELOPMENT_TEAM = HWG7293UWD;
@@ -714,25 +726,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		C3EFA57024667448006AEDF6 /* XCRemoteSwiftPackageReference "SwURL" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/cmtrounce/SwURL";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.3;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		C3EFA57124667448006AEDF6 /* SwURL */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C3EFA57024667448006AEDF6 /* XCRemoteSwiftPackageReference "SwURL" */;
-			productName = SwURL;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C37CEE73245D65F000473301 /* Project object */;
 }

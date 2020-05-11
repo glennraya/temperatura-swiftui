@@ -29,13 +29,17 @@ struct OtherDetails: View {
                             WeatherPartials(dataType: "min_temp", temp_min: weatherData.temp_min)
                             WeatherPartials(dataType: "max_temp", temp_max: weatherData.temp_max)
                         }
+                        
+                        VStack(spacing: 15) {
+                            WeatherPartials(dataType: "sunrise", sunrise: weatherData.sunrise)
+                            WeatherPartials(dataType: "sunset", sunset: weatherData.sunset)
+                        }
                     }
                     .padding()
-//                    .background(Color.gray)
                 }
                 
             }
-        }.edgesIgnoringSafeArea(.all)
+        }.edgesIgnoringSafeArea(.top)
     }
 }
 

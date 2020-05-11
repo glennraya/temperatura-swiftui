@@ -1,6 +1,6 @@
 import SwiftUI
-import SwURL
 
+/// This will get the device's screen dimensions.
 let screen = UIScreen.main.bounds
 
 struct Home: View {
@@ -16,7 +16,7 @@ struct Home: View {
     /// Show the search city text field or not.
     @State var searchCity: Bool = false
     
-    @State var size: CGFloat = 0.0
+    @State var iconScaleInitSize: CGFloat = 0.0
     
     /// The ImageUrl class is responsible for fetching remote images.
     let imageLoader = ImageUrl()
@@ -28,28 +28,14 @@ struct Home: View {
     var placemark: String { return("\(lm.placemark?.locality ?? "")") }
     var latitude: Double  { return lm.location?.latitude ?? 0 }
     var longitude: Double { return lm.location?.longitude ?? 0 }
-    
-    /// Get the current date.
-    var date = Date().description(with: Locale.init(identifier: "Asia/Manila"))
-    
-    /// Get the timezone.
-    var timezone = TimeZone.current
-    
-    var dateUnix = Date(timeIntervalSince1970: 1588991610)
-    
-    /// Format date
-    var dateFormat: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .full
-        return formatter.string(from: dateUnix)
-    }
 
     
-    /// Initialize the temperaturaVM.
+    /// Initialize the temperaturaVM (If not using EnvironmentObject).
 //    init() {
 //        self.temperaturaVM = TemperaturaViewModel()
 //    }
 //
+    /// Create the view to render the remote image.
     private func makeContent() -> some View {
         if let image = image {
             return AnyView(
@@ -69,21 +55,29 @@ struct Home: View {
             ZStack {
                 /// Temperature reading.
                 GeometryReader { geo in
-                    HStack {
+                    HStack(alignment: .top) {
                         Spacer()
                         self.makeContent()
                         Text("\(self.temperaturaVM.temperature != "" ? self.temperaturaVM.temperature : "30.0")")
-                            .font(.system(size: 92)).bold()
+                            .font(.system(size: 82)).bold()
                             .foregroundColor(.white)
                             .shadow(color: Color.black.opacity(0.35), radius: 5, x: 0, y: 5)
-                            .scaleEffect(self.size)
+                            .scaleEffect(self.iconScaleInitSize)
                             .onAppear() {
                                 withAnimation(Animation.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0)) {
-                                    self.size = 1
+                                    self.iconScaleInitSize = 1
                                 }
                         }
+                        Text("°C")
+                            .font(.system(size: 24)).bold()
+                            .foregroundColor(Color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
+                            .shadow(color: Color.black.opacity(0.35), radius: 5, x: 0, y: 5)
+                            .padding(.top, 20)
+                            .padding(.trailing, 16)
                         
-                    }.offset(x: -16, y: geo.size.height / 2 - 48)
+                    }
+                    .frame(width: screen.width, alignment: .bottomTrailing)
+                    .offset(x: 0, y: geo.size.height / 2 - 42)
                 }
                 
                 /// City, weather description and magnifying glass button
@@ -121,7 +115,7 @@ struct Home: View {
                                     self.temperaturaVM.searchOnLoad(city: self.placemark, lat: self.latitude, long: self.longitude)
                                     self.showAlert = true
                                 }) {
-                                    Image(systemName: "location.fill")
+                                    Image(systemName: "location.circle.fill")
                                         .font(Font.system(size: 26))
                                         .foregroundColor(.white)
                                         .shadow(color: Color.black.opacity(0.35), radius: 1, x: 0, y: 1)
@@ -131,10 +125,10 @@ struct Home: View {
                                 }
                             
                             }
-                            .scaleEffect(self.size)
+                            .scaleEffect(self.iconScaleInitSize)
                             .onAppear() {
                                 withAnimation(Animation.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0)) {
-                                    self.size = 1
+                                    self.iconScaleInitSize = 1
                                 }
                             }
                             .offset(x: self.searchCity ? 80 : -32)
@@ -170,7 +164,7 @@ struct Home: View {
             }
             .frame(maxWidth: .infinity, maxHeight: screen.height * 0.70)
             .background(
-                Image("sunny")
+                Image(self.temperaturaVM.loadBackgroundImage)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
             )
