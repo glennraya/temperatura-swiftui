@@ -13,36 +13,51 @@ struct Forecast: View {
     @ObservedObject var weatherVM = WeatherViewModel()
     @ObservedObject var lm = LocationManager()
     
+    /// This will cache the weather icon from the openweather api.
+    @Environment(\.imageCache) var cache: ImageCache
+    
+    /// Location details
     var latitude: Double  { return lm.location?.latitude ?? 0 }
     var longitude: Double { return lm.location?.longitude ?? 0 }
-    var zip: String { return lm.placemark?.name ?? "2100" }
+    var zip: String { return lm.placemark?.postalCode ?? "2100" }
     var country_code: String { return lm.placemark?.isoCountryCode ?? "PH" }
     var status: String    { return("\(String(describing: lm.status))") }
     
     var body: some View {
         NavigationView {
             List(self.forecastVM.forecastResponse.list, id: \.dt) { forecast in
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("\(self.forecastVM.dateFormatter(timeStamp: forecast.dt!))").font(.headline)
-                        Text("\(self.forecastVM.getTime(timeStamp: forecast.dt!))")
-                            .font(.footnote)
-                            .foregroundColor(Color.secondary)
-                        Text(self.forecastVM.city)
-                            .font(.footnote).foregroundColor(Color.gray)
-                        Text("\(forecast.weather?[0].description ?? "")".capitalized)
-                            .font(.caption)
-                            .padding(.top, 20)
-                        Text("\(self.zip)")
-                    }
-                    Spacer()
+                
+                /// Navigate to the forecast details screen for more details.
+                NavigationLink(destination: ForecastDetails(city: self.forecastVM.city + ", " + self.country_code, main: forecast.main!, weather: (forecast.weather?[0])!, wind: forecast.wind!, date: self.forecastVM.dateFormatter(timeStamp: forecast.dt!), time: self.forecastVM.getTime(timeStamp: forecast.dt!))) {
                     HStack {
-                        AsyncImage(url: URL(string: "\(Constants.weatherIconUrl)\(forecast.weather?[0].icon ?? "02d")@2x.png")!, placeholder: ActivityIndicator(isAnimating: .constant(true), style: .large))
-                            .frame(width: 50, height: 50)
-                            .scaledToFit()
-                            .clipShape(Circle())
-                        Text("32.9")
+                        VStack(alignment: .leading) {
+                            Text("\(self.forecastVM.dateFormatter(timeStamp: forecast.dt!))").font(.footnote)
+                            Text("\(self.forecastVM.getTime(timeStamp: forecast.dt!))")
+                                .font(.footnote)
+                                .foregroundColor(Color.secondary)
+                            Text("\(self.forecastVM.city), \(self.country_code)")
+                                .font(.footnote).foregroundColor(Color.gray)
+                            Text("\(forecast.weather?[0].description ?? "")".capitalized)
+                                .font(.caption)
+                                .bold()
+                                .foregroundColor(Color.blue)
+                                .padding(.top, 20)
+                        }
+                        Spacer()
+                        VStack(alignment: .trailing) {
+                            HStack {
+                                /// Use the AsyncImage class to load and cache remote images.
+                                AsyncImage(url: URL(string: "\(Constants.weatherIconUrl)\(forecast.weather?[0].icon ?? "02d")@2x.png")!,
+                                   cache: self.cache,
+                                   placeholder: ActivityIndicator(isAnimating: .constant(true), style: .large)
+                                )
+                                    .frame(width: 50, height: 50)
+                                    .aspectRatio(contentMode: .fit)
+                                Text("\(self.forecastVM.formatDouble(temp: (forecast.main?.temp) ?? 0.0))°C")
+                            }
+                        }
                     }
+                    .padding(.vertical, 10)
                 }
             }
             .onAppear() {
@@ -50,11 +65,7 @@ struct Forecast: View {
                 /// The zip and country code are returned by the location manager.
                 self.forecastVM.getForecastByZip(by: self.zip, country_code: self.country_code)
             }
-            .onDisappear() {
-                
-            }
-            
-            .navigationBarTitle("Weather Forecast")
+            .navigationBarTitle("Next 5 Days")
             .navigationBarItems(trailing: Button(action: {
                 /// Reload the weather forecast.
                 self.forecastVM.getForecastByZip(by: self.zip, country_code: self.country_code)

@@ -1,21 +1,22 @@
 //
 //  AsyncImage.swift
-//  iPlay
+//  AsyncImage
 //
-//  Created by Glenn Raya on 5/2/20.
-//  Copyright © 2020 Glenn Raya. All rights reserved.
+//  Created by Vadym Bulavin on 2/13/20.
+//  Copyright © 2020 Vadym Bulavin. All rights reserved.
 //
 
-import Foundation
 import SwiftUI
 
 struct AsyncImage<Placeholder: View>: View {
     @ObservedObject private var loader: ImageLoader
     private let placeholder: Placeholder?
+    private let configuration: (Image) -> Image
     
-    init(url: URL, placeholder: Placeholder? = nil) {
-        loader = ImageLoader(url: url)
+    init(url: URL, cache: ImageCache? = nil, placeholder: Placeholder? = nil, configuration: @escaping (Image) -> Image = { $0 }) {
+        loader = ImageLoader(url: url, cache: cache)
         self.placeholder = placeholder
+        self.configuration = configuration
     }
     
     var body: some View {
@@ -27,9 +28,7 @@ struct AsyncImage<Placeholder: View>: View {
     private var image: some View {
         Group {
             if loader.image != nil {
-                Image(uiImage: loader.image!)
-                    .resizable()
-//                .scaledToFill()
+                configuration(Image(uiImage: loader.image!).resizable())
             } else {
                 placeholder
             }

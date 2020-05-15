@@ -53,6 +53,10 @@ class ForecastViewModel: ObservableObject {
         }
     }
     
+    public func formatDouble(temp: Double) -> String {
+        return String(format: "%.1f", temp)
+    }
+    
     /// Get the weather forecast by city name
     public func getForecast(by city: String) {
         self.forecastService.getForecast(city: city) { forecast in

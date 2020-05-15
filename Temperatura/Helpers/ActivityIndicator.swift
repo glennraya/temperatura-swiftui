@@ -1,6 +1,6 @@
 //
 //  ActivityIndicator.swift
-//  iPlay
+//  Temperatura
 //
 // This class will use the UIActivityIndicator for UIKit
 // since SwiftUI doesn't have the activity indicator.
