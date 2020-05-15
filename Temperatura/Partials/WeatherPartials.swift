@@ -9,50 +9,50 @@
 import SwiftUI
 
 struct WeatherPartials: View {
-    var dataType: String? = ""
+    var dataType: String? = "sunrise"
     var humidity: String? = ""
     var windSpeed: String? = ""
     var temp_min: String? = ""
     var temp_max: String? = ""
-    var sunrise: String? = ""
+    var sunrise: String? = "5:55 AM"
     var sunset: String? = ""
     
     var body: some View {
         HStack(spacing: 20.0) {
             if dataType == "humidity" {
                 Image(systemName: "thermometer")
-                    .font(.system(.largeTitle))
+                    .font(.system(.title))
                     .foregroundColor(Color(#colorLiteral(red: 0.7254902124, green: 0.4784313738, blue: 0.09803921729, alpha: 1)))
             }
             
             if dataType == "windSpeed" {
-                Image(systemName: "wind")
-                    .font(.system(.largeTitle))
+                Image(systemName: "tornado")
+                    .font(.system(.title))
                     .foregroundColor(Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)))
             }
 
             if dataType == "min_temp" {
                 Image(systemName: "arrow.down")
-                    .font(.system(.largeTitle))
+                    .font(.system(.title))
                     .foregroundColor(Color(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)))
             }
 
             if dataType == "max_temp" {
                 Image(systemName: "arrow.up")
-                    .font(.system(.largeTitle))
+                    .font(.system(.title))
                     .foregroundColor(Color(#colorLiteral(red: 0.521568656, green: 0.1098039225, blue: 0.05098039284, alpha: 1)))
             }
             
             if dataType == "sunrise" {
                 Image(systemName: "sunrise.fill")
-                    .font(.system(.largeTitle))
+                    .font(.system(.title))
                     .foregroundColor(Color(#colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)))
             }
             
             if dataType == "sunset" {
                 Image(systemName: "sunset.fill")
-                    .font(.system(.largeTitle))
-                    .foregroundColor(Color(#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)))
+                    .font(.system(.title))
+                    .foregroundColor(Color(#colorLiteral(red: 0.7254902124, green: 0.4784313738, blue: 0.09803921729, alpha: 1)))
             }
             
             VStack(spacing: 10) {
@@ -113,11 +113,8 @@ struct WeatherPartials: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                     HStack {
-                        Text("\((sunrise != "" ? sunrise : "-") ?? "")")
+                        Text("\((sunrise != "" ? sunrise?.lowercased() : "-") ?? "")")
                             .font(.callout).bold()
-                        
-                        Text("")
-                            .font(.footnote).foregroundColor(Color.secondary)
                     }
                 }
                 
@@ -126,11 +123,8 @@ struct WeatherPartials: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                     HStack {
-                        Text("\((sunset != "" ? sunset : "-") ?? "")")
+                        Text("\((sunset != "" ? sunset?.lowercased() : "-") ?? "")")
                             .font(.callout).bold()
-                        
-                        Text("")
-                            .font(.footnote).foregroundColor(Color.secondary)
                     }
                 }
             }

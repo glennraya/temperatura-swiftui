@@ -10,44 +10,52 @@ import SwiftUI
 
 /// Other weather details embedded in ScrollView view.
 struct OtherDetails: View {
-//    @ObservedObject var weatherData = TemperaturaViewModel()
-    @EnvironmentObject var weatherData: TemperaturaViewModel
+    //    @ObservedObject var weatherData = TemperaturaViewModel()
+    @EnvironmentObject var weatherData: WeatherViewModel
+    @State var showList: Bool = false
+    @State var showGrid: Bool = true
     
     var body: some View {
         ZStack {
             Color.init(#colorLiteral(red: 0.9672107618, green: 0.9672107618, blue: 0.9672107618, alpha: 1))
+            //            Color.init(#colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1))
             VStack {
-                ScrollView(showsIndicators: false) {
-                    VStack {
-                        HStack(spacing: 15) {
-                            WeatherPartials(dataType: "humidity", humidity: weatherData.humidity)
-                            WeatherPartials(dataType: "windSpeed", windSpeed: weatherData.wind_speed)
+                HStack(alignment: .center) {
+                    Text("Weather Details")
+                        .font(.headline)
+                    Spacer()
+                    HStack(spacing: 16.0) {
+                        Button(action: { self.showGrid = true; self.showList = false }) {
+                            Image(systemName: "rectangle.grid.2x2")
+                                .font(.system(size: 24, weight: .light))
                         }
-                        .padding(.top, 30)
+                        .foregroundColor(self.showGrid ? Color.blue : Color.secondary)
                         
-                        HStack(spacing: 15) {
-                            WeatherPartials(dataType: "min_temp", temp_min: weatherData.temp_min)
-                            WeatherPartials(dataType: "max_temp", temp_max: weatherData.temp_max)
+                        Button(action: { self.showList = true; self.showGrid = false }) {
+                            Image(systemName: "list.dash")
+                                .font(.system(size: 24, weight: .light))
                         }
-                        
-                        VStack(spacing: 15) {
-                            WeatherPartials(dataType: "sunrise", sunrise: weatherData.sunrise)
-                            WeatherPartials(dataType: "sunset", sunset: weatherData.sunset)
-                        }
+                        .foregroundColor(showList ? Color.blue : Color.secondary)
                     }
-                    .padding()
-                }
+                }.padding()
                 
+                if showGrid {
+                    /// Show the grid view when grid view option is selected.
+                    GridView()
+                } else {
+                    /// Show the list view when the list view option is selected.
+                    ListView()
+                }
             }
-        }.edgesIgnoringSafeArea(.top)
+        }
     }
 }
 
 struct OtherDetails_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            OtherDetails().environmentObject(TemperaturaViewModel())
-            OtherDetails().previewLayout(.fixed(width: 700, height: 323)).environmentObject(TemperaturaViewModel())
+            OtherDetails().environmentObject(WeatherViewModel())
+            OtherDetails().previewLayout(.fixed(width: 700, height: 323)).environmentObject(WeatherViewModel())
         }
     }
 }

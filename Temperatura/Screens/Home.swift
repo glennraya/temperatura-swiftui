@@ -7,7 +7,7 @@ struct Home: View {
 //    @ObservedObject var temperaturaVM = TemperaturaViewModel()
     /// The TemperaturaViewModel has been moved to the environment object.
     /// To make all the data available to child components of this view.
-    @EnvironmentObject var temperaturaVM: TemperaturaViewModel
+    @EnvironmentObject var temperaturaVM: WeatherViewModel
     
     /// The location manager is the class that fetches the location of the user
     /// This requires 'Privacy' location proerties in the info.plist file.
@@ -104,7 +104,7 @@ struct Home: View {
                             HStack {
                                 Button(action: { self.searchCity = true }) {
                                     Image(systemName: "magnifyingglass")
-                                        .font(Font.system(size: 26))
+                                        .font(Font.system(size: 24, weight: .light))
                                         .foregroundColor(.white)
                                         .shadow(color: Color.black.opacity(0.35), radius: 1, x: 0, y: 1)
                                         
@@ -115,8 +115,8 @@ struct Home: View {
                                     self.temperaturaVM.searchOnLoad(city: self.placemark, lat: self.latitude, long: self.longitude)
                                     self.showAlert = true
                                 }) {
-                                    Image(systemName: "location.circle.fill")
-                                        .font(Font.system(size: 26))
+                                    Image(systemName: "location.north.fill")
+                                        .font(Font.system(size: 24, weight: .light))
                                         .foregroundColor(.white)
                                         .shadow(color: Color.black.opacity(0.35), radius: 1, x: 0, y: 1)
                                 }.padding(.leading, 16)
@@ -189,6 +189,6 @@ struct Home: View {
 /// Preview
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        Home().environmentObject(TemperaturaViewModel())
+        Home().environmentObject(WeatherViewModel())
     }
 }

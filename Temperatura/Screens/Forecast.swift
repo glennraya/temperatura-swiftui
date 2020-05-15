@@ -9,48 +9,57 @@
 import SwiftUI
 
 struct Forecast: View {
-    @ObservedObject var temperaturaVm = TemperaturaViewModel()
+    @ObservedObject var forecastVM = ForecastViewModel()
+    @ObservedObject var weatherVM = WeatherViewModel()
     @ObservedObject var lm = LocationManager()
     
     var latitude: Double  { return lm.location?.latitude ?? 0 }
     var longitude: Double { return lm.location?.longitude ?? 0 }
-    var placemark: String { return("\(lm.placemark?.locality ?? "XXX")") }
+    var zip: String { return lm.placemark?.name ?? "2100" }
+    var country_code: String { return lm.placemark?.isoCountryCode ?? "PH" }
     var status: String    { return("\(String(describing: lm.status))") }
-    
-    /// Reload the weather forecast.
-    private func reloadWeather() {
-        self.temperaturaVm.searchOnLoad(city: "", lat: self.latitude, long: self.longitude)
-    }
     
     var body: some View {
         NavigationView {
-            List {
+            List(self.forecastVM.forecastResponse.list, id: \.dt) { forecast in
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("Sunday").font(.headline)
-                        Text("City of Balanga")
+                        Text("\(self.forecastVM.dateFormatter(timeStamp: forecast.dt!))").font(.headline)
+                        Text("\(self.forecastVM.getTime(timeStamp: forecast.dt!))")
+                            .font(.footnote)
+                            .foregroundColor(Color.secondary)
+                        Text(self.forecastVM.city)
                             .font(.footnote).foregroundColor(Color.gray)
-                        Text("Mosty Cloudy")
+                        Text("\(forecast.weather?[0].description ?? "")".capitalized)
                             .font(.caption)
                             .padding(.top, 20)
+                        Text("\(self.zip)")
                     }
                     Spacer()
-                    Text("32.9")
+                    HStack {
+                        AsyncImage(url: URL(string: "\(Constants.weatherIconUrl)\(forecast.weather?[0].icon ?? "02d")@2x.png")!, placeholder: ActivityIndicator(isAnimating: .constant(true), style: .large))
+                            .frame(width: 50, height: 50)
+                            .scaledToFit()
+                            .clipShape(Circle())
+                        Text("32.9")
+                    }
                 }
+            }
+            .onAppear() {
+                /// When the list view appears, get the weather forecast by zip and country code.
+                /// The zip and country code are returned by the location manager.
+                self.forecastVM.getForecastByZip(by: self.zip, country_code: self.country_code)
+            }
+            .onDisappear() {
                 
-                VStack(alignment: .leading) {
-                    Text("Latitude: \(self.latitude)")
-                    Text("Longitude: \(self.longitude)")
-                    Text("Placemark: \(self.placemark)")
-                    Text("Status: \(self.status)")
-                }
             }
             
             .navigationBarTitle("Weather Forecast")
             .navigationBarItems(trailing: Button(action: {
-                self.reloadWeather()
+                /// Reload the weather forecast.
+                self.forecastVM.getForecastByZip(by: self.zip, country_code: self.country_code)
             }) {
-                Text("Get")
+                Image(systemName: "arrow.clockwise")
             })
         }
     }

@@ -19,6 +19,7 @@ struct City: Codable {
     var country: String?
     var sunrise: Int?
     var sunset: Int?
+    var timezone: Int?
 }
 
 /// 'list' object in forecast model.

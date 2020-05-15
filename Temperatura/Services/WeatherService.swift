@@ -10,7 +10,7 @@
 import Foundation
 import SwiftUI
 
-class TemperaturaService {
+class WeatherService {
     /// Get the current weather forecast for a given city.
     func getWeather(city: String, byCoordinates: Bool, lat: Double, long: Double, completion: @escaping (WeatherResponse?) -> ()) {
         
@@ -32,7 +32,6 @@ class TemperaturaService {
 
             if let weatherResponse = weatherResponse {
                 let weatherData = weatherResponse
-//                print(weatherData)
                 completion(weatherData)
 
             } else {
