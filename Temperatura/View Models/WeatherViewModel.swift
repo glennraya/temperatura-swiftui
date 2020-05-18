@@ -117,10 +117,49 @@ class WeatherViewModel: ObservableObject {
     var weatherIcon: String {
         if self.weatherResponse.weather.count != 0 {
             if let weatherIcon: String = self.weatherResponse.weather[0].icon {
-                return "https://openweathermap.org/img/wn/\(weatherIcon)@2x.png"
+                switch weatherIcon {
+                    case "01d":
+                        return "clear_sky_day"
+                    case "01n":
+                        return "clear_sky_night"
+                    case "02d":
+                        return "few_clouds_day"
+                    case "02n":
+                        return "few_clouds_night"
+                    case "03d":
+                        return "scattered_clouds"
+                    case "03n":
+                        return "scattered_clouds"
+                    case "04d":
+                        return "broken_clouds"
+                    case "04n":
+                        return "broken_clouds"
+                    case "09d":
+                        return "shower_rain"
+                    case "09n":
+                        return "shower_rain"
+                    case "10d":
+                        return "rain_day"
+                    case "10n":
+                        return "rain_night"
+                    case "11d":
+                        return "thunderstorm_day"
+                    case "11n":
+                        return "thunderstorm_night"
+                    case "13d":
+                        return "snow"
+                    case "13n":
+                        return "snow"
+                    case "50d":
+                        return "mist"
+                    case "50n":
+                        return "mist"
+                    default:
+                        return "clear_sky_day"
+                }
             }
         }
-        return "https://openweathermap.org/img/wn/02d@2x.png"
+        return "clear_sky_day"
     }
     
     /// Get the weather description
@@ -160,10 +199,14 @@ class WeatherViewModel: ObservableObject {
     var cityNameOnLoad: String = ""
     
     /// Search for city
-    public func search() {
+    public func search(searchText: String) {
         /// You need to add the 'addingPercentEncoding' property so you can search for cities
         /// with space between words, otherwise it will only work on single word cities.
-        if let city = self.cityName.addingPercentEncoding(withAllowedCharacters: .alphanumerics) {
+//        if let city = self.cityName.addingPercentEncoding(withAllowedCharacters: .alphanumerics) {
+//            fetchWeather(by: city, byCoordinates: false, lat: 0.0, long: 0.0)
+//        }
+        
+        if let city = searchText.addingPercentEncoding(withAllowedCharacters: .alphanumerics) {
             fetchWeather(by: city, byCoordinates: false, lat: 0.0, long: 0.0)
         }
     }

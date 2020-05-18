@@ -71,6 +71,50 @@ class ForecastViewModel: ObservableObject {
         return 0.0
     }
     
+    /// Get the weather condition icon.
+    public func getWeatherIcon(icon_name: String) -> String {
+        switch icon_name {
+            case "01d":
+                return "clear_sky_day"
+            case "01n":
+                return "clear_sky_night"
+            case "02d":
+                return "few_clouds_day"
+            case "02n":
+                return "few_clouds_night"
+            case "03d":
+                return "scattered_clouds"
+            case "03n":
+                return "scattered_clouds"
+            case "04d":
+                return "broken_clouds"
+            case "04n":
+                return "broken_clouds"
+            case "09d":
+                return "shower_rain"
+            case "09n":
+                return "shower_rain"
+            case "10d":
+                return "rain_day"
+            case "10n":
+                return "rain_night"
+            case "11d":
+                return "thunderstorm_day"
+            case "11n":
+                return "thunderstorm_night"
+            case "13d":
+                return "snow"
+            case "13n":
+                return "snow"
+            case "50d":
+                return "mist"
+            case "50n":
+                return "mist"
+            default:
+                return "clear_sky_day"
+        }
+    }
+    
     public func reloadForecast() {
         
     }

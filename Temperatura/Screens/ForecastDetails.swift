@@ -21,9 +21,14 @@ struct ForecastDetails: View {
             VStack {
                 VStack(alignment: .trailing) {
                     HStack(alignment: .center) {
-                        AsyncImage(url: URL(string: "\(Constants.weatherIconUrl)\(self.forecast.weather![0].icon ?? "02d")@2x.png")!, placeholder: ActivityIndicator(isAnimating: .constant(true), style: .large))
+//                        AsyncImage(url: URL(string: "\(Constants.weatherIconUrl)\(self.forecast.weather![0].icon ?? "02d")@2x.png")!, placeholder: ActivityIndicator(isAnimating: .constant(true), style: .large))
+//                            .frame(width: 82, height: 82)
+//                            .aspectRatio(contentMode: .fit)
+                        Image("\(self.forecastVM.getWeatherIcon(icon_name: (forecast.weather?[0].icon)!))")
+                            .resizable()
                             .frame(width: 82, height: 82)
                             .aspectRatio(contentMode: .fit)
+                            .padding(.trailing, 32)
                         Text("\(self.forecastVM.formatDouble(temp: self.forecast.main?.temp ?? 0.0))")
                             .font(.system(size: 72.0, weight: .bold))
                             .bold()
@@ -63,7 +68,6 @@ struct ForecastDetails: View {
                         }
                     }
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-//                    .background(Color.orange)
                 }
                 .padding(.bottom, 30)
                 .padding(.horizontal, 16)

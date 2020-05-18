@@ -28,7 +28,7 @@ struct Forecast: View {
             List(self.forecastVM.forecastResponse.list, id: \.dt) { forecast in
                 
                 /// Navigate to the forecast details screen for more details.
-//                NavigationLink(destination: ForecastDetails(city: self.forecastVM.city + ", " + self.country_code, forecast: forecast, time: self.forecastVM.getTime(timeStamp: forecast.dt!), latitude: self.forecastVM.latitude, longitude: self.forecastVM.longitude)) {
+                NavigationLink(destination: ForecastDetails(city: self.forecastVM.city + ", " + self.country_code, forecast: forecast, time: self.forecastVM.getTime(timeStamp: forecast.dt!), latitude: self.forecastVM.latitude, longitude: self.forecastVM.longitude)) {
                     HStack {
                         VStack(alignment: .leading) {
                             Text("\(self.forecastVM.dateFormatter(timeStamp: forecast.dt!))").font(.footnote)
@@ -47,10 +47,14 @@ struct Forecast: View {
                         VStack(alignment: .trailing) {
                             HStack {
                                 /// Use the AsyncImage class to load and cache remote images.
-                                AsyncImage(url: URL(string: "\(Constants.weatherIconUrl)\(forecast.weather?[0].icon ?? "02d")@2x.png")!,
-                                   cache: self.cache,
-                                   placeholder: ActivityIndicator(isAnimating: .constant(true), style: .large)
-                                )
+//                                AsyncImage(url: URL(string: "\(Constants.weatherIconUrl)\(forecast.weather?[0].icon ?? "02d")@2x.png")!,
+//                                   cache: self.cache,
+//                                   placeholder: ActivityIndicator(isAnimating: .constant(true), style: .large)
+//                                )
+//                                    .frame(width: 50, height: 50)
+//                                    .aspectRatio(contentMode: .fit)
+                                Image("\(self.forecastVM.getWeatherIcon(icon_name: (forecast.weather?[0].icon)!))")
+                                    .resizable()
                                     .frame(width: 50, height: 50)
                                     .aspectRatio(contentMode: .fit)
                                 Text("\(self.forecastVM.formatDouble(temp: (forecast.main?.temp) ?? 0.0))°C")
@@ -58,7 +62,7 @@ struct Forecast: View {
                         }
                     }
                     .padding(.vertical, 10)
-//                }
+                }
             }
             .onAppear() {
                 /// When the list view appears, get the weather forecast by zip and country code.

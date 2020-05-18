@@ -15,9 +15,6 @@ struct Home: View {
     /// To make all the data available to child components of this view.
     @EnvironmentObject var temperaturaVM: WeatherViewModel
     
-    /// This will cache the weather icon from the openweather api.
-    @Environment(\.imageCache) var cache: ImageCache
-    
     /// The location manager is the class that fetches the location of the user
     /// This requires 'Privacy' location proerties in the info.plist file.
     @ObservedObject var lm = LocationManager()
@@ -27,10 +24,6 @@ struct Home: View {
     
     @State var iconScaleInitSize: CGFloat = 0.0
     
-    /// The ImageUrl class is responsible for fetching remote images.
-    let imageLoader = ImageUrl()
-    
-    @State var image: UIImage? = nil
     @State var showAlert: Bool = false
     
     /// The city associated with the area.
@@ -57,6 +50,8 @@ struct Home: View {
     /// The name of the country.
     var country_name: String { return lm.placemark?.country ?? "Philippines" }
     
+    @State var searchField = ""
+    
     var body: some View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: self.temperaturaVM.loadBackgroundImage ? [Color(#colorLiteral(red: 0.09411764706, green: 0.4196078431, blue: 0.8431372549, alpha: 1)), Color(#colorLiteral(red: 0.5441120482, green: 0.5205187814, blue: 0.9921568627, alpha: 1))] : [Color(#colorLiteral(red: 0.1019607843, green: 0.168627451, blue: 0.262745098, alpha: 1)), Color(#colorLiteral(red: 0.3647058824, green: 0.5058823529, blue: 0.6549019608, alpha: 1))]), startPoint: .bottom, endPoint: .top)
@@ -66,7 +61,22 @@ struct Home: View {
                 /// Top Info (weather condition, city, date and weather icon).
                 VStack {
                     HStack(spacing: 32) {
-                        Spacer()
+                        /// City search text field.
+                        HStack {
+                            TextField("Enter city name", text: self.$searchField) {
+                                self.temperaturaVM.search(searchText: self.searchField)
+//                                self.temperaturaVM.cityName = ""
+                            }
+                            .padding()
+                            
+                            Button(action: { self.searchField = "" }) {
+                                Text("Clear")
+                            }
+                            .padding(.trailing)
+                        }
+                        .background(Color.white.opacity(0.30))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        
                         Button(action: {
                             self.temperaturaVM.getWeatherByZipCode(by: self.zip, country_code: self.country_code)
                             self.showAlert = true
@@ -79,19 +89,14 @@ struct Home: View {
                         .alert(isPresented: $showAlert) {
                             Alert(title: Text("Your Location"), message: Text("You are currently located at \(self.placemark), \(self.administrativeArea) \(self.country_name)"), dismissButton: .default(Text("Got it!")))
                         }
-
-                        Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
-                            Image(systemName: "magnifyingglass")
-                        }
-                        .font(.system(size: 21))
-                        .foregroundColor(Color.white)
-                        .shadow(color: Color.black.opacity(0.20), radius: 5, x: 0, y: 6)
                     }
                     .padding(.top, 16)
                     .padding(.horizontal, 16)
                     .padding(.bottom, 16)
+                    
+                    /// Weather icon, description, place and date.
                     HStack {
-                        Image("10d")
+                        Image("\(self.temperaturaVM.weatherIcon)")
                             .resizable()
                             .frame(width: 92, height: 92)
                             .aspectRatio(contentMode: .fit)
@@ -113,7 +118,7 @@ struct Home: View {
                     }
                     .padding(.horizontal, 16)
                     
-                    /// Temperature info.
+                    /// Temperature reading.
                     Text("\(self.temperaturaVM.temperature)°")
                         .font(.system(size: 72))
                         .bold()
@@ -135,7 +140,7 @@ struct Home: View {
                     .foregroundColor(.white)
                     .shadow(color: Color.black.opacity(0.20), radius: 4, x: 0, y: 3)
                     
-                    /// Other weather details.
+                    /// Grid view of other weather details.
                     VStack(spacing: 47) {
                         HStack(spacing: 5) {
                             DetailCell(icon: "thermometer.sun", title: "Humidity", data: self.temperaturaVM.temperature, unit: "%")
@@ -170,6 +175,7 @@ struct Home: View {
             .edgesIgnoringSafeArea(.horizontal)
             
         }.background(Color.red)
+     
             
     }
 }
