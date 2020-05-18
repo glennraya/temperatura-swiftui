@@ -28,7 +28,7 @@ struct Forecast: View {
             List(self.forecastVM.forecastResponse.list, id: \.dt) { forecast in
                 
                 /// Navigate to the forecast details screen for more details.
-                NavigationLink(destination: ForecastDetails(city: self.forecastVM.city + ", " + self.country_code, main: forecast.main!, weather: (forecast.weather?[0])!, wind: forecast.wind!, date: self.forecastVM.dateFormatter(timeStamp: forecast.dt!), time: self.forecastVM.getTime(timeStamp: forecast.dt!))) {
+//                NavigationLink(destination: ForecastDetails(city: self.forecastVM.city + ", " + self.country_code, forecast: forecast, time: self.forecastVM.getTime(timeStamp: forecast.dt!), latitude: self.forecastVM.latitude, longitude: self.forecastVM.longitude)) {
                     HStack {
                         VStack(alignment: .leading) {
                             Text("\(self.forecastVM.dateFormatter(timeStamp: forecast.dt!))").font(.footnote)
@@ -58,7 +58,7 @@ struct Forecast: View {
                         }
                     }
                     .padding(.vertical, 10)
-                }
+//                }
             }
             .onAppear() {
                 /// When the list view appears, get the weather forecast by zip and country code.

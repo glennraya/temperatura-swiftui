@@ -14,6 +14,7 @@ class WeatherViewModel: ObservableObject {
     private var temperatureService: WeatherService!
     @Published var city_name: String = ""
     @Published var weatherResponse = WeatherResponse.init(name: "", dt: 0, timezone: 0, main: Main(), wind: Wind(), weather: [], sys: Sys())
+    @Published var dayTime: Bool = true
     var weatherDate: Int = 0
 
     /// Initialize the WeatherService
@@ -32,7 +33,7 @@ class WeatherViewModel: ObservableObject {
     /// The the current time in 12-hour format with the right timezone (e.g. 5:52 AM)
     private func getTime(timeStamp: Int) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm"
+        formatter.dateFormat = "h:mm a"
         formatter.timeZone = TimeZone(secondsFromGMT: self.weatherResponse.timezone)
         return formatter.string(from: Date(timeIntervalSince1970: TimeInterval(timeStamp)))
     }
@@ -63,7 +64,7 @@ class WeatherViewModel: ObservableObject {
         if let temp = self.weatherResponse.main.temp {
             return String(format: "%.1f", temp)
         } else {
-            return ""
+            return "0.0"
         }
     }
     
@@ -72,7 +73,7 @@ class WeatherViewModel: ObservableObject {
         if let temp_min = self.weatherResponse.main.temp_min {
             return String(format: "%.1f", temp_min)
         } else {
-            return ""
+            return "0.0"
         }
     }
     
@@ -81,7 +82,7 @@ class WeatherViewModel: ObservableObject {
         if let temp_max = self.weatherResponse.main.temp_max {
             return String(format: "%.1f", temp_max)
         } else {
-            return ""
+            return "0.0"
         }
     }
     
@@ -99,7 +100,7 @@ class WeatherViewModel: ObservableObject {
         if let wind_speed = self.weatherResponse.wind.speed {
             return String(format: "%.1f", wind_speed)
         } else {
-            return ""
+            return "0.0"
         }
     }
     
@@ -134,15 +135,15 @@ class WeatherViewModel: ObservableObject {
     }
     
     /// Determine the background image to be loaded based on whether it's night or day time.
-    var loadBackgroundImage: String {
+    var loadBackgroundImage: Bool {
         if let sunset = self.weatherResponse.sys.sunset {
             if self.weatherResponse.dt >= sunset {
-                return "night"
+                return false
             } else {
-                return "sunny"
+                return true
             }
         }
-        return "sunny"
+        return true
         
     }
     
@@ -150,9 +151,8 @@ class WeatherViewModel: ObservableObject {
     var city_country: String {
         if self.weatherResponse.name != "" && country_code != "" {
             return self.weatherResponse.name + ", " + self.country_code
-        } else {
-            return ""
         }
+        return "-"
     }
     
     /// City name
@@ -171,9 +171,18 @@ class WeatherViewModel: ObservableObject {
     /// Search for weather in a city upon the app loads.
     public func searchOnLoad(city: String, lat: Double, long: Double) {
         if let city = city.addingPercentEncoding(withAllowedCharacters: .alphanumerics) {
-            
-            /// TODO: Insert the location coordinates here...
             fetchWeather(by: city, byCoordinates: true, lat: lat, long: long)
+        }
+    }
+    
+    /// Get the current weather by zip code.
+    public func getWeatherByZipCode(by zip: String, country_code: String) {
+        self.temperatureService.getWeatherByZipCode(zip: zip, country_code: country_code) { weather in
+            if let weather = weather {
+                DispatchQueue.main.async {
+                    self.weatherResponse = weather
+                }
+            }
         }
     }
     
@@ -185,7 +194,6 @@ class WeatherViewModel: ObservableObject {
             if let weather = weather {
                 DispatchQueue.main.async {
                     self.weatherResponse = weather
-                    print(self.weatherResponse)
                 }
             }
         }

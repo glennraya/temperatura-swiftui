@@ -23,7 +23,7 @@ class ForecastViewModel: ObservableObject {
         return formatter.string(from: Date(timeIntervalSince1970: TimeInterval(timeStamp)))
     }
     
-    /// The the current time in 12-hour format with the right timezone (e.g. 5:52 AM)
+    /// The the current time in 12-hour format with the right timezone with the am/pm (e.g. 5:52)
     public func getTime(timeStamp: Int) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"
@@ -37,6 +37,38 @@ class ForecastViewModel: ObservableObject {
             return city
         }
         return ""
+    }
+    
+    /// Get the sunrise value
+    var sunrise: Int {
+        if let sunrise = forecastResponse.city.sunrise {
+            return sunrise
+        }
+        return 0
+    }
+    
+    /// Get the sunset value
+    var sunset: Int {
+        if let sunset = forecastResponse.city.sunset {
+            return sunset
+        }
+        return 0
+    }
+    
+    /// Get the latitude coordinate.
+    var latitude: Double {
+        if let latitude = forecastResponse.city.coord?.lat {
+            return latitude
+        }
+        return 0.0
+    }
+    
+    /// Get the longitude coordinate.
+    var longitude: Double {
+        if let longitude = forecastResponse.city.coord?.lon {
+            return longitude
+        }
+        return 0.0
     }
     
     public func reloadForecast() {
@@ -63,7 +95,6 @@ class ForecastViewModel: ObservableObject {
             if let forecast = forecast {
                 DispatchQueue.main.async {
                     self.forecastResponse = forecast
-                    print(self.forecastResponse)
                 }
             }
         }

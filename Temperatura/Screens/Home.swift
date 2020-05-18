@@ -1,13 +1,22 @@
+//
+//  Home.swift
+//  Temperatura
+//
+//  Created by Glenn Raya on 5/17/20.
+//  Copyright © 2020 Glenn Raya. All rights reserved.
+//
+
 import SwiftUI
 
-/// This will get the device's screen dimensions.
 let screen = UIScreen.main.bounds
 
 struct Home: View {
-//    @ObservedObject var temperaturaVM = TemperaturaViewModel()
     /// The TemperaturaViewModel has been moved to the environment object.
     /// To make all the data available to child components of this view.
     @EnvironmentObject var temperaturaVM: WeatherViewModel
+    
+    /// This will cache the weather icon from the openweather api.
+    @Environment(\.imageCache) var cache: ImageCache
     
     /// The location manager is the class that fetches the location of the user
     /// This requires 'Privacy' location proerties in the info.plist file.
@@ -24,170 +33,183 @@ struct Home: View {
     @State var image: UIImage? = nil
     @State var showAlert: Bool = false
     
-    /// These are the data returned by the location manager class.
+    /// The city associated with the area.
     var placemark: String { return("\(lm.placemark?.locality ?? "")") }
-    var latitude: Double  { return lm.location?.latitude ?? 0 }
-    var longitude: Double { return lm.location?.longitude ?? 0 }
-
     
-    /// Initialize the temperaturaVM (If not using EnvironmentObject).
-//    init() {
-//        self.temperaturaVM = TemperaturaViewModel()
-//    }
-//
-    /// Create the view to render the remote image.
-    private func makeContent() -> some View {
-        if let image = image {
-            return AnyView(
-                Image(uiImage: image)
-                    .resizable()
-                    .frame(width: 82, height: 82)
-                    .aspectRatio(contentMode: .fit)
-            )
-        } else {
-            return AnyView(Text("😢"))
-        }
-    }
+    /// Additional city-level information for the area.
+    var subLocality: String { return("\(lm.placemark?.subLocality ?? "")") }
+    
+    /// Administrative area could be state or province.
+    var administrativeArea: String { return("\(lm.placemark?.administrativeArea ?? "")") }
+    
+    /// Latitude coordinate of the area.
+    var latitude: Double  { return lm.location?.latitude ?? 0 }
+    
+    /// Longitude coordinate of the area.
+    var longitude: Double { return lm.location?.longitude ?? 0 }
+    
+    /// The zip code of the area.
+    var zip: String { return lm.placemark?.postalCode ?? "2100" }
+    
+    /// The country code of the area.
+    var country_code: String { return lm.placemark?.isoCountryCode ?? "PH" }
+    
+    /// The name of the country.
+    var country_name: String { return lm.placemark?.country ?? "Philippines" }
     
     var body: some View {
-        
-        VStack {
-            ZStack {
-                /// Temperature reading.
-                GeometryReader { geo in
-                    HStack(alignment: .top) {
+        ZStack {
+            LinearGradient(gradient: Gradient(colors: self.temperaturaVM.loadBackgroundImage ? [Color(#colorLiteral(red: 0.09411764706, green: 0.4196078431, blue: 0.8431372549, alpha: 1)), Color(#colorLiteral(red: 0.5441120482, green: 0.5205187814, blue: 0.9921568627, alpha: 1))] : [Color(#colorLiteral(red: 0.1019607843, green: 0.168627451, blue: 0.262745098, alpha: 1)), Color(#colorLiteral(red: 0.3647058824, green: 0.5058823529, blue: 0.6549019608, alpha: 1))]), startPoint: .bottom, endPoint: .top)
+                .edgesIgnoringSafeArea(.all)
+            
+            ScrollView(showsIndicators: false) {
+                /// Top Info (weather condition, city, date and weather icon).
+                VStack {
+                    HStack(spacing: 32) {
                         Spacer()
-                        self.makeContent()
-                        Text("\(self.temperaturaVM.temperature != "" ? self.temperaturaVM.temperature : "30.0")")
-                            .font(.system(size: 82)).bold()
-                            .foregroundColor(.white)
-                            .shadow(color: Color.black.opacity(0.35), radius: 5, x: 0, y: 5)
-                            .scaleEffect(self.iconScaleInitSize)
-                            .onAppear() {
-                                withAnimation(Animation.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0)) {
-                                    self.iconScaleInitSize = 1
-                                }
+                        Button(action: {
+                            self.temperaturaVM.getWeatherByZipCode(by: self.zip, country_code: self.country_code)
+                            self.showAlert = true
+                        }) {
+                            Image(systemName: "location.fill")
                         }
-                        Text("°C")
-                            .font(.system(size: 24)).bold()
-                            .foregroundColor(Color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
-                            .shadow(color: Color.black.opacity(0.35), radius: 5, x: 0, y: 5)
-                            .padding(.top, 20)
-                            .padding(.trailing, 16)
-                        
+                        .font(.system(size: 21))
+                        .foregroundColor(Color.white)
+                        .shadow(color: Color.black.opacity(0.20), radius: 5, x: 0, y: 6)
+                        .alert(isPresented: $showAlert) {
+                            Alert(title: Text("Your Location"), message: Text("You are currently located at \(self.placemark), \(self.administrativeArea) \(self.country_name)"), dismissButton: .default(Text("Got it!")))
+                        }
+
+                        Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
+                            Image(systemName: "magnifyingglass")
+                        }
+                        .font(.system(size: 21))
+                        .foregroundColor(Color.white)
+                        .shadow(color: Color.black.opacity(0.20), radius: 5, x: 0, y: 6)
                     }
-                    .frame(width: screen.width, alignment: .bottomTrailing)
-                    .offset(x: 0, y: geo.size.height / 2 - 42)
-                }
-                
-                /// City, weather description and magnifying glass button
-                ZStack(alignment: .topLeading) {
-                    GeometryReader { geo in
+                    .padding(.top, 16)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 16)
+                    HStack {
+                        Image("10d")
+                            .resizable()
+                            .frame(width: 92, height: 92)
+                            .aspectRatio(contentMode: .fit)
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: 5.0) {
+                            Text(self.temperaturaVM.description.capitalized)
+                                .font(.title)
+                                .bold()
+                                .foregroundColor(.white)
+                                .shadow(color: Color.black.opacity(0.20), radius: 4, x: 0, y: 3)
+                            Text(self.temperaturaVM.city_country)
+                                .foregroundColor(.white)
+                                .shadow(color: Color.black.opacity(0.20), radius: 4, x: 0, y: 3)
+                            Text(self.temperaturaVM.date)
+                                .font(.footnote)
+                                .foregroundColor(.white)
+                                .shadow(color: Color.black.opacity(0.20), radius: 4, x: 0, y: 3)
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    
+                    /// Temperature info.
+                    Text("\(self.temperaturaVM.temperature)°")
+                        .font(.system(size: 72))
+                        .bold()
+                        .foregroundColor(.white)
+                        .shadow(color: Color.black.opacity(0.20), radius: 4, x: 0, y: 3)
+                    
+                    /// Sunrise and sunset.
+                    HStack(spacing: 40) {
                         HStack {
-                            VStack(alignment: .leading, spacing: 5.0) {
-                                Text(self.temperaturaVM.city_country != "" ? self.temperaturaVM.city_country : "City of Balanga, PH")
-                                    .font(.caption)
-                                    .foregroundColor(.white)
-                                    .shadow(color: Color.black.opacity(0.5), radius: 3, x: 0, y: 3)
-                                HStack {
-                                    Text(self.temperaturaVM.description != "" ? self.temperaturaVM.description.capitalized : "Sunny")
-                                        .font(.headline)
-                                        .foregroundColor(.white)
-                                        .shadow(color: Color.black.opacity(0.35), radius: 3, x: 0, y: 3)
-                                }
-                                Text("\(self.temperaturaVM.date)")
-                                    .font(.footnote)
-                                    .foregroundColor(.white)
-                                    .shadow(color: Color.black.opacity(0.35), radius: 3, x: 0, y: 3)
-                            }
+                            Image(systemName: "sunrise")
+                            Text("\(self.temperaturaVM.sunrise.replacingOccurrences(of: "AM", with: "")) am")
+                        }
+
+                        HStack {
+                            Image(systemName: "sunset")
+                            Text("\(self.temperaturaVM.sunset.replacingOccurrences(of: "PM", with: "")) pm")
+                        }
+                    }
+                    .foregroundColor(.white)
+                    .shadow(color: Color.black.opacity(0.20), radius: 4, x: 0, y: 3)
+                    
+                    /// Other weather details.
+                    VStack(spacing: 47) {
+                        HStack(spacing: 5) {
+                            DetailCell(icon: "thermometer.sun", title: "Humidity", data: self.temperaturaVM.temperature, unit: "%")
                             Spacer()
-                            HStack {
-                                Button(action: { self.searchCity = true }) {
-                                    Image(systemName: "magnifyingglass")
-                                        .font(Font.system(size: 24, weight: .light))
-                                        .foregroundColor(.white)
-                                        .shadow(color: Color.black.opacity(0.35), radius: 1, x: 0, y: 1)
-                                        
-                                }
-                                .animation(Animation.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0).delay(self.searchCity ? 0.0 : 0.4))
-                                
-                                Button(action: {
-                                    self.temperaturaVM.searchOnLoad(city: self.placemark, lat: self.latitude, long: self.longitude)
-                                    self.showAlert = true
-                                }) {
-                                    Image(systemName: "location.north.fill")
-                                        .font(Font.system(size: 24, weight: .light))
-                                        .foregroundColor(.white)
-                                        .shadow(color: Color.black.opacity(0.35), radius: 1, x: 0, y: 1)
-                                }.padding(.leading, 16)
-                                    .alert(isPresented: self.$showAlert) {
-                                        Alert(title: Text("Current Location"), message: Text(self.temperaturaVM.city_country), dismissButton: .default(Text("Got it!")))
-                                }
-                            
-                            }
-                            .scaleEffect(self.iconScaleInitSize)
-                            .onAppear() {
-                                withAnimation(Animation.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0)) {
-                                    self.iconScaleInitSize = 1
-                                }
-                            }
-                            .offset(x: self.searchCity ? 80 : -32)
-                        }.offset(x: 16, y: (geo.size.height - geo.size.height) - geo.size.height / 2 + 16)
-                    }
-                }.padding(.top, 16)
-                
-                ZStack(alignment: .top) {
-                    GeometryReader { geo in
-                        HStack {
-                            TextField("Enter City", text: self.$temperaturaVM.cityName) {
-                                self.temperaturaVM.search()
-                                self.searchCity = false
-                                self.temperaturaVM.cityName = ""
-                                self.imageLoader.load(url: URL(string: self.temperaturaVM.weatherIcon)!)
-                            }
-                            .padding(.vertical, 20)
-                            .padding(.horizontal, 20)
-                            
-                            Button(action: { self.searchCity = false; self.temperaturaVM.cityName = "" }) {
-                                Text("Close")
-                            }.offset(x: -20)
+                            DetailCell(icon: "tornado", title: "Wind Speed", data: self.temperaturaVM.wind_speed, unit: "Km/hr")
                         }
-                        .frame(width: screen.width - 30)
-                        .background(Color.white)
-                        .cornerRadius(50)
-                        .shadow(color: Color.black.opacity(0.45), radius: 30, x: 0, y: 10)
-                        .offset(y: self.searchCity ? (geo.size.height - geo.size.height) - geo.size.height / 2 + 32 : -280)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.3, blendDuration: 0.3))
+                        
+                        HStack(spacing: 5) {
+                            DetailCell(icon: "arrow.down.circle", title: "Min Temp", data: self.temperaturaVM.temp_min, unit: "°C")
+                            Divider().frame(height: 50).background(Color.white)
+                            DetailCell(icon: "arrow.up.circle", title: "Max Temp", data: self.temperaturaVM.temp_max, unit: "°C")
+                        }
+                        
+                        HStack(spacing: 5) {
+                            DetailCell(icon: "heart", title: "Feels Like", data: "32.4", unit: "°C")
+                            Divider().frame(height: 50).background(Color.white)
+                            DetailCell(icon: "rectangle.compress.vertical", title: "Pressure", data: "1002", unit: "hPa")
+                        }
                     }
+                    .padding(.vertical, 30)
+                    .background(Color.secondary.opacity(0.30))
+                    .clipShape(RoundedRectangle(cornerRadius: 10.0))
                     
                 }
-            }
-            .frame(maxWidth: .infinity, maxHeight: screen.height * 0.70)
-            .background(
-                Image(self.temperaturaVM.loadBackgroundImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            )
-            .onAppear() {
-                self.temperaturaVM.searchOnLoad(city: self.placemark, lat: self.latitude, long: self.longitude)
-                self.imageLoader.load(url: URL(string: self.temperaturaVM.weatherIcon)!)
-            }
-            .onReceive(imageLoader.objectWillChange, perform: { image in
-                self.image = image
-            })
-            .onDisappear(perform: {
-                self.imageLoader.cancel()
-            })
-            
-            /// List view for other weather details
-            OtherDetails()
                 
-        }
+            }
+            .padding(.top)
+            .padding(.horizontal)
+            .onAppear() {
+                self.temperaturaVM.getWeatherByZipCode(by: self.zip, country_code: self.country_code)
+            }
+            .edgesIgnoringSafeArea(.horizontal)
+            
+        }.background(Color.red)
+            
     }
 }
 
-/// Preview
-struct ContentView_Previews: PreviewProvider {
+/// Refactored weather detail grid cell.
+struct DetailCell: View {
+    var icon: String = "thermometer.sun"
+    var title: String = "Humidity"
+    var data: String = "30.0"
+    var unit: String = "%"
+    
+    var body: some View {
+        HStack(spacing: 16) {
+            Image(systemName: icon)
+                .font(.system(size: 33, weight: .thin))
+                .foregroundColor(.white)
+            VStack(alignment: .leading, spacing: 5.0) {
+                Text(title)
+                    .foregroundColor(Color(#colorLiteral(red: 0.5607843137, green: 0.7411764706, blue: 0.9803921569, alpha: 1)))
+                HStack {
+                    Text("\(data)")
+                        .font(.system(size: 21))
+                        .bold()
+                        .foregroundColor(.white)
+                    Text(unit)
+                        .font(.system(size: 14))
+                        .bold()
+                        .foregroundColor(.white)
+                }
+            }
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+            
+        }
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+        .padding(.horizontal, 16)
+        .shadow(color: Color.black.opacity(0.20), radius: 4, x: 0, y: 3)
+    }
+}
+
+struct Home_Previews: PreviewProvider {
     static var previews: some View {
         Home().environmentObject(WeatherViewModel())
     }

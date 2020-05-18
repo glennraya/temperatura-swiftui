@@ -20,6 +20,7 @@ struct City: Codable {
     var sunrise: Int?
     var sunset: Int?
     var timezone: Int?
+    var coord: Coordinates?
 }
 
 /// 'list' object in forecast model.
@@ -61,4 +62,10 @@ struct Clouds: Codable {
 struct WindForecast: Codable {
     var speed: Double?
     var deg: Int?
+}
+
+/// 'coord' object insde the 'city' object in forecast model.
+struct Coordinates: Codable {
+    var lat: Double?
+    var lon: Double?
 }

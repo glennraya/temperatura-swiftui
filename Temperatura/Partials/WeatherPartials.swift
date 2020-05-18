@@ -30,13 +30,13 @@ struct WeatherPartials: View {
                     .font(.system(.title))
                     .foregroundColor(Color(#colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1)))
             }
-
+            
             if dataType == "min_temp" {
                 Image(systemName: "arrow.down")
                     .font(.system(.title))
                     .foregroundColor(Color(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)))
             }
-
+            
             if dataType == "max_temp" {
                 Image(systemName: "arrow.up")
                     .font(.system(.title))
@@ -113,8 +113,10 @@ struct WeatherPartials: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                     HStack {
-                        Text("\((sunrise != "" ? sunrise?.lowercased() : "-") ?? "")")
+                        Text("\((sunrise != "" ? sunrise?.lowercased().replacingOccurrences(of: "am", with: "") : "-") ?? "")")
                             .font(.callout).bold()
+                        Text("am")
+                            .font(.footnote).foregroundColor(Color.secondary)
                     }
                 }
                 
@@ -123,8 +125,10 @@ struct WeatherPartials: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
                     HStack {
-                        Text("\((sunset != "" ? sunset?.lowercased() : "-") ?? "")")
+                        Text("\((sunset != "" ? sunset?.lowercased().replacingOccurrences(of: "pm", with: "") : "-") ?? "")")
                             .font(.callout).bold()
+                        Text("pm")
+                            .font(.footnote).foregroundColor(Color.secondary)
                     }
                 }
             }
